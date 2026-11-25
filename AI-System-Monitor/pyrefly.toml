@@ -1,0 +1,8 @@
+search_path = [
+    ".",
+    "ai",
+    "alerts",
+    "monitoring",
+    "reports"
+]
+ignore-missing-imports = ["reportlab.*", "reportlab", "psutil.*", "psutil"]

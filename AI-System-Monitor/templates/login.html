@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - AI-Powered System Monitoring Platform{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-75 py-5">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+        <!-- Login Card -->
+        <div class="card login-card shadow-lg border-0">
+            <div class="card-body p-4 p-md-5">
+                <!-- Branding Header -->
+                <div class="text-center mb-4">
+                    <div class="login-brand-icon mx-auto mb-3">
+                        <i class="bi bi-cpu-fill"></i>
+                    </div>
+                    <h3 class="fw-bold mb-1">System Console</h3>
+                    <p class="text-muted small">AI-Powered System Monitoring Platform</p>
+                </div>
+
+                <!-- Login Form -->
+                <form method="POST" action="{{ url_for('login') }}" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="username" class="form-label small fw-semibold text-muted">
+                            <i class="bi bi-person me-1"></i> Username
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-body border-secondary-subtle text-muted">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required autofocus value="{{ username or '' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label small fw-semibold text-muted d-flex justify-content-between">
+                            <span><i class="bi bi-lock me-1"></i> Password</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-body border-secondary-subtle text-muted">
+                                <i class="bi bi-key-fill"></i>
+                            </span>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                        <i class="bi bi-box-arrow-in-right"></i> Authenticate & Enter
+                    </button>
+                </form>
+
+                <!-- Academic Demo Note -->
+                <div class="mt-4 p-3 rounded-3 bg-body-tertiary border border-secondary-subtle">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <i class="bi bi-info-circle-fill text-primary"></i>
+                        <span class="fw-semibold small">Default Academic Credentials</span>
+                    </div>
+                    <div class="small text-muted font-monospace mt-1">
+                        Username: <strong>admin</strong><br>
+                        Password: <strong>Admin@123</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer py-3 text-center border-top border-secondary-subtle text-muted small bg-transparent">
+                <i class="bi bi-shield-check text-success me-1"></i> SHA-256 / Scrypt Cryptographic Session Security
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}System Health Audit Reports - AI-Powered System Monitor{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-4">
+    <!-- Reports Header -->
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div>
+                        <h4 class="fw-bold mb-1"><i class="bi bi-file-earmark-bar-graph-fill text-primary me-2"></i>Audit Report Generation Center</h4>
+                        <p class="text-muted small mb-0">Export comprehensive operational records in standard CSV or formatted enterprise PDF format</p>
+                    </div>
+                    <div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 font-monospace">
+                            Database Status: Ready
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Download Options -->
+<div class="row g-4 mb-4">
+    <!-- PDF Report Card -->
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm border-0 h-100 report-box">
+            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="report-icon-box pdf-box">
+                            <i class="bi bi-file-earmark-pdf-fill text-danger fs-1"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Executive Health Audit Report (PDF)</h5>
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">ReportLab Engine</span>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-3">
+                        A publication-quality, multi-section PDF document structured for system audits, engineering reviews, and academic viva presentations.
+                    </p>
+                    <div class="bg-body-tertiary p-3 rounded-3 border border-secondary-subtle small mb-4">
+                        <div class="fw-semibold text-light mb-2"><i class="bi bi-check2-circle text-success me-1"></i>Included Audit Artifacts:</div>
+                        <ul class="list-unstyled mb-0 d-flex flex-column gap-1 text-secondary">
+                            <li>&bull; Complete Host Hardware & Runtime Topography</li>
+                            <li>&bull; Statistical Metric Aggregates (Min, Max, Mean for CPU, RAM, Disk)</li>
+                            <li>&bull; Recent Critical Incident & Recovery Incident Logs</li>
+                            <li>&bull; AI Diagnostic Root-Cause Recommendations</li>
+                            <li>&bull; Timestamped Sample Telemetry Table</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <a href="{{ url_for('download_pdf') }}" class="btn btn-danger w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                    <i class="bi bi-cloud-arrow-down-fill"></i> Download PDF Audit Report
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSV Report Card -->
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm border-0 h-100 report-box">
+            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="report-icon-box csv-box">
+                            <i class="bi bi-file-earmark-spreadsheet-fill text-success fs-1"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Raw Telemetry Dataset (CSV)</h5>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">Tabular Stream</span>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-3">
+                        Complete raw monitoring snapshot logs ready for immediate ingestion into spreadsheet tools (Excel, LibreOffice) or data science pipelines (Pandas, Jupyter).
+                    </p>
+                    <div class="bg-body-tertiary p-3 rounded-3 border border-secondary-subtle small mb-4">
+                        <div class="fw-semibold text-light mb-2"><i class="bi bi-check2-circle text-success me-1"></i>Export Schema Fields:</div>
+                        <ul class="list-unstyled mb-0 d-flex flex-column gap-1 text-secondary">
+                            <li>&bull; <code>Timestamp</code> (ISO format)</li>
+                            <li>&bull; <code>CPU_Percent</code>, <code>RAM_Percent</code>, <code>Disk_Percent</code></li>
+                            <li>&bull; <code>Network_Status</code>, <code>Upload_Speed_KB</code>, <code>Download_Speed_KB</code></li>
+                            <li>&bull; <code>Overall_Health</code> Classification</li>
+                            <li>&bull; <code>AI_Recommendation</code> Diagnostic String</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <a href="{{ url_for('download_csv') }}" class="btn btn-success w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                    <i class="bi bi-file-earmark-arrow-down-fill"></i> Download CSV Dataset
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Database Retained Records Statistics -->
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-transparent border-0 pt-3 px-4 pb-0">
+                <h6 class="fw-bold mb-0 text-muted"><i class="bi bi-database-check text-info me-2"></i>Export Scope & Retention Summary</h6>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-3 text-center">
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 rounded-3 bg-body-tertiary border border-secondary-subtle">
+                            <div class="text-muted small text-uppercase">Retained Snapshots</div>
+                            <div class="h4 fw-bold mb-0 text-primary">{{ stats.total_records }}</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 rounded-3 bg-body-tertiary border border-secondary-subtle">
+                            <div class="text-muted small text-uppercase">Average CPU</div>
+                            <div class="h4 fw-bold mb-0 text-info">{{ stats.avg_cpu }}%</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 rounded-3 bg-body-tertiary border border-secondary-subtle">
+                            <div class="text-muted small text-uppercase">Average RAM</div>
+                            <div class="h4 fw-bold mb-0 text-warning">{{ stats.avg_ram }}%</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 rounded-3 bg-body-tertiary border border-secondary-subtle">
+                            <div class="text-muted small text-uppercase">Incidents Recorded</div>
+                            <div class="h4 fw-bold mb-0 text-danger">{{ alert_stats.total_alerts }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

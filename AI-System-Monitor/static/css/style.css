@@ -1,0 +1,281 @@
+/* ==========================================================================
+   AI-POWERED SYSTEM MONITORING PLATFORM - MODERN DARK CYBER STYLESHEET
+   ========================================================================== */
+
+:root {
+    --bg-base: #0a0f1d;
+    --bg-card: #111827;
+    --bg-card-hover: #162032;
+    --border-color: #1f293d;
+    --border-light: rgba(255, 255, 255, 0.08);
+    
+    --color-healthy: #10b981;
+    --color-warning: #f59e0b;
+    --color-critical: #ef4444;
+    --color-info: #38bdf8;
+    --color-primary: #6366f1;
+
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-base) !important;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------------- Top Navbar ---------------- */
+.top-navbar {
+    background-color: rgba(17, 24, 39, 0.92) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.brand-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #38bdf8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.25rem;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.brand-title {
+    font-size: 1.2rem;
+    letter-spacing: -0.5px;
+}
+
+.brand-badge {
+    font-size: 0.65rem;
+    background: #6366f1;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.nav-link {
+    color: #94a3b8 !important;
+    font-weight: 500;
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+    color: #38bdf8 !important;
+}
+
+/* ---------------- Cards & Layout ---------------- */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.metric-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+
+.cpu-icon {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+}
+
+.ram-icon {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+}
+
+.disk-icon {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.net-icon {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.metric-value {
+    font-family: var(--font-mono);
+    letter-spacing: -1px;
+}
+
+.progress-sm {
+    height: 6px;
+    border-radius: 4px;
+}
+
+/* ---------------- Overall Health Banner ---------------- */
+.health-banner-card {
+    border-left: 5px solid var(--color-healthy) !important;
+    background: linear-gradient(135deg, rgba(17, 24, 39, 1) 0%, rgba(15, 23, 42, 0.8) 100%);
+    transition: all 0.3s ease;
+}
+
+.health-icon-large {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--color-healthy);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+}
+
+.status-healthy {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-warning {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-critical {
+    background-color: rgba(239, 68, 68, 0.15) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* ---------------- AI Recommendation Box ---------------- */
+.ai-recommendation-card {
+    background: linear-gradient(135deg, #111827 0%, #151e34 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.ai-sparkle-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.25rem;
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+}
+
+.ai-box {
+    background-color: rgba(10, 15, 29, 0.6);
+}
+
+/* ---------------- Charts ---------------- */
+.chart-wrapper {
+    position: relative;
+    height: 220px;
+    width: 100%;
+}
+
+/* ---------------- Pulsing Status Dot ---------------- */
+.pulse-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: var(--color-healthy);
+    display: inline-block;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulse-ring 2s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+.pulse-badge {
+    animation: pulse-alert 2s infinite ease-in-out;
+}
+
+@keyframes pulse-alert {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.status-indicator-pill {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
+}
+
+/* ---------------- Login Card ---------------- */
+.login-card {
+    background: rgba(17, 24, 39, 0.95);
+    border: 1px solid var(--border-color) !important;
+}
+
+.login-brand-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6366f1, #38bdf8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #ffffff;
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.5);
+}
+
+/* ---------------- Tables & Formatting ---------------- */
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.04);
+    --bs-table-border-color: var(--border-color);
+}
+
+.font-monospace {
+    font-family: var(--font-mono) !important;
+}
+
+.status-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 30px;
+}

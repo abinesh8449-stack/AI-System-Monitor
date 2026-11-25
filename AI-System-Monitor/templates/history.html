@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Monitoring History - AI-Powered System Monitor{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1"><i class="bi bi-clock-history text-primary me-2"></i>System Telemetry History</h4>
+                        <p class="text-muted small mb-0">Audit logs of periodic snapshots, threshold alerts, and AI diagnostics</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('download_csv') }}" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export CSV
+                        </a>
+                        <a href="{{ url_for('download_pdf') }}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Export PDF
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Filter & Search Toolbar -->
+                <form method="GET" action="{{ url_for('history') }}" class="row g-2 align-items-end mb-4 p-3 rounded-3 bg-body-tertiary border border-secondary-subtle">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label small fw-semibold text-muted">Search Diagnostics</label>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-body"><i class="bi bi-search"></i></span>
+                            <input type="text" name="search" class="form-control" placeholder="Search keywords..." value="{{ search }}">
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label class="form-label small fw-semibold text-muted">Health Condition</label>
+                        <select name="status" class="form-select form-select-sm">
+                            <option value="ALL" {% if status == 'ALL' or not status %}selected{% endif %}>All Statuses</option>
+                            <option value="HEALTHY" {% if status == 'HEALTHY' %}selected{% endif %}>HEALTHY</option>
+                            <option value="WARNING" {% if status == 'WARNING' %}selected{% endif %}>WARNING</option>
+                            <option value="CRITICAL" {% if status == 'CRITICAL' %}selected{% endif %}>CRITICAL</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label class="form-label small fw-semibold text-muted">From Date</label>
+                        <input type="date" name="start_date" class="form-control form-control-sm" value="{{ start_date }}">
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <label class="form-label small fw-semibold text-muted">To Date</label>
+                        <input type="date" name="end_date" class="form-control form-control-sm" value="{{ end_date }}">
+                    </div>
+                    <div class="col-6 col-md-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-sm w-50">
+                            <i class="bi bi-funnel-fill me-1"></i> Filter
+                        </button>
+                        <a href="{{ url_for('history') }}" class="btn btn-outline-secondary btn-sm w-50">
+                            <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Data Table -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle small mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-3">Timestamp</th>
+                                <th>CPU %</th>
+                                <th>RAM %</th>
+                                <th>Disk %</th>
+                                <th>Network</th>
+                                <th>I/O Speed</th>
+                                <th>Overall Status</th>
+                                <th>AI Diagnostic Summary</th>
+                                <th class="pe-3 text-center">Alert</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if records %}
+                                {% for row in records %}
+                                <tr>
+                                    <td class="ps-3 font-monospace text-nowrap">{{ row.timestamp }}</td>
+                                    <td>
+                                        <span class="badge {% if row.cpu_percent >= 80 %}bg-danger{% elif row.cpu_percent >= 50 %}bg-warning text-dark{% else %}bg-success-subtle text-success border border-success-subtle{% endif %}">
+                                            {{ row.cpu_percent }}%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if row.ram_percent >= 80 %}bg-danger{% elif row.ram_percent >= 50 %}bg-warning text-dark{% else %}bg-info-subtle text-info border border-info-subtle{% endif %}">
+                                            {{ row.ram_percent }}%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if row.disk_percent >= 85 %}bg-danger{% elif row.disk_percent >= 70 %}bg-warning text-dark{% else %}bg-secondary-subtle text-light border border-secondary-subtle{% endif %}">
+                                            {{ row.disk_percent }}%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if 'Connected' in row.network_status %}bg-success-subtle text-success border border-success-subtle{% else %}bg-danger-subtle text-danger border border-danger-subtle{% endif %}">
+                                            {{ row.network_status }}
+                                        </span>
+                                    </td>
+                                    <td class="font-monospace text-muted text-nowrap">
+                                        &uarr; {{ row.network_upload_speed }} KB/s<br>
+                                        &darr; {{ row.network_download_speed }} KB/s
+                                    </td>
+                                    <td>
+                                        <span class="badge status-pill {% if row.overall_status == 'HEALTHY' %}status-healthy{% elif row.overall_status == 'WARNING' %}status-warning{% else %}status-critical{% endif %}">
+                                            {{ row.overall_status }}
+                                        </span>
+                                    </td>
+                                    <td class="text-truncate" style="max-width: 280px;" title="{{ row.ai_recommendation }}">
+                                        {{ row.ai_recommendation or 'System Nominal' }}
+                                    </td>
+                                    <td class="pe-3 text-center">
+                                        {% if row.is_alert_triggered == 1 %}
+                                            <span class="badge bg-danger rounded-pill"><i class="bi bi-bell-fill"></i> Triggered</span>
+                                        {% else %}
+                                            <span class="text-muted">&mdash;</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="9" class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox fs-2 d-block mb-2"></i>
+                                        No monitoring history found matching the selected filters.
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Toolbar -->
+                {% if total_pages > 1 %}
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-4 pt-3 border-top border-secondary-subtle">
+                    <div class="small text-muted">
+                        Showing page <strong>{{ page }}</strong> of <strong>{{ total_pages }}</strong> (Total <strong>{{ total_records }}</strong> logs)
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                                <a class="page-link" href="{{ url_for('history', page=page-1, search=search, status=status, start_date=start_date, end_date=end_date) }}">
+                                    <i class="bi bi-chevron-left"></i> Previous
+                                </a>
+                            </li>
+                            {% for p in range(max(1, page - 2), min(total_pages + 1, page + 3)) %}
+                            <li class="page-item {% if p == page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('history', page=p, search=search, status=status, start_date=start_date, end_date=end_date) }}">{{ p }}</a>
+                            </li>
+                            {% endfor %}
+                            <li class="page-item {% if page >= total_pages %}disabled{% endif %}">
+                                <a class="page-link" href="{{ url_for('history', page=page+1, search=search, status=status, start_date=start_date, end_date=end_date) }}">
+                                    Next <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

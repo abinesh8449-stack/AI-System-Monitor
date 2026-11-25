@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Server Hardware & OS Specifications - AI-Powered System Monitor{% endblock %}
+
+{% block content %}
+<div class="row g-3 mb-4">
+    <!-- Server Specifications Header -->
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div>
+                        <h4 class="fw-bold mb-1"><i class="bi bi-hdd-stack-fill text-primary me-2"></i>Hardware & Operating System Architecture</h4>
+                        <p class="text-muted small mb-0">Live inspection of host infrastructure parameters gathered via psutil and system syscalls</p>
+                    </div>
+                    <div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 font-monospace">
+                            Host: {{ info.hostname }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <!-- Host & Operating System Specifications -->
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-transparent border-0 pt-3 px-4 pb-0">
+                <h6 class="fw-bold mb-0 text-muted"><i class="bi bi-laptop text-primary me-2"></i>Operating System & Runtime</h6>
+            </div>
+            <div class="card-body p-4">
+                <ul class="list-unstyled mb-0 d-flex flex-column gap-3 small">
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">OS Platform:</span>
+                        <strong class="text-light">{{ info.os_name }} ({{ info.os_release }})</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Kernel / OS Version:</span>
+                        <span class="font-monospace">{{ info.os_version }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Machine Architecture:</span>
+                        <span>{{ info.machine }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Host Node Name:</span>
+                        <span class="fw-bold text-primary">{{ info.hostname }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Python Environment:</span>
+                        <span class="font-monospace">Python {{ info.python_version }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">System Boot Time:</span>
+                        <span class="font-monospace">{{ info.boot_time }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-1">
+                        <span class="text-muted">Elapsed System Uptime:</span>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle font-monospace px-3 py-1">{{ info.uptime }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processor & Memory Architecture -->
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-transparent border-0 pt-3 px-4 pb-0">
+                <h6 class="fw-bold mb-0 text-muted"><i class="bi bi-cpu text-info me-2"></i>Processor & Memory Hierarchy</h6>
+            </div>
+            <div class="card-body p-4">
+                <ul class="list-unstyled mb-0 d-flex flex-column gap-3 small">
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Processor Description:</span>
+                        <span class="text-truncate ms-3 text-light" title="{{ info.processor }}">{{ info.processor }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Physical CPU Cores:</span>
+                        <strong class="font-monospace">{{ info.cpu_physical_cores }} Cores</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Logical CPU Threads:</span>
+                        <strong class="font-monospace">{{ info.cpu_logical_cores }} Threads</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Base Frequency:</span>
+                        <span class="font-monospace">{{ info.cpu_frequency_current_mhz }} MHz</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Physical Installed RAM:</span>
+                        <strong class="text-info font-monospace">{{ info.total_ram_gb }} GB</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-1 border-bottom border-secondary-subtle">
+                        <span class="text-muted">Primary Root Capacity:</span>
+                        <strong class="text-warning font-monospace">{{ info.total_disk_gb }} GB</strong>
+                    </li>
+                    <li class="d-flex justify-content-between py-1">
+                        <span class="text-muted">Virtual Memory Paging:</span>
+                        <span class="text-success"><i class="bi bi-check-circle me-1"></i>Swap Subsystem Active</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Storage Partitions Table -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-transparent border-0 pt-3 px-4 pb-2">
+                <h6 class="fw-bold mb-0 text-muted"><i class="bi bi-device-hdd text-warning me-2"></i>Attached Storage Volumes & Mount Points</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle small mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-4">Device</th>
+                                <th>Mount Point</th>
+                                <th>File System</th>
+                                <th>Total Storage</th>
+                                <th>Used Storage</th>
+                                <th>Available Free</th>
+                                <th class="pe-4">Utilization</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if partitions %}
+                                {% for part in partitions %}
+                                <tr>
+                                    <td class="ps-4 font-monospace fw-semibold">{{ part.device }}</td>
+                                    <td class="font-monospace text-primary">{{ part.mountpoint }}</td>
+                                    <td><span class="badge bg-secondary-subtle text-light">{{ part.fstype }}</span></td>
+                                    <td class="font-monospace">{{ part.total_gb }} GB</td>
+                                    <td class="font-monospace">{{ part.used_gb }} GB</td>
+                                    <td class="font-monospace text-success">{{ part.free_gb }} GB</td>
+                                    <td class="pe-4" style="min-width: 140px;">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="progress flex-grow-1 progress-sm bg-secondary-subtle">
+                                                <div class="progress-bar {% if part.percent >= 85 %}bg-danger{% elif part.percent >= 70 %}bg-warning{% else %}bg-success{% endif %}" style="width: {{ part.percent }}%"></div>
+                                            </div>
+                                            <span class="fw-bold font-monospace">{{ part.percent }}%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="7" class="text-center py-4 text-muted">No partition details accessible.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Network Adapters & Interfaces Table -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-transparent border-0 pt-3 px-4 pb-2">
+                <h6 class="fw-bold mb-0 text-muted"><i class="bi bi-ethernet text-success me-2"></i>Network Adapters & Interface Topography</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle small mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-4">Interface Name</th>
+                                <th>IPv4 Address</th>
+                                <th>Subnet Netmask</th>
+                                <th>Hardware MAC</th>
+                                <th>NIC Speed</th>
+                                <th class="pe-4">Link Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if net_info.interfaces %}
+                                {% for iface in net_info.interfaces %}
+                                <tr>
+                                    <td class="ps-4 fw-semibold font-monospace">{{ iface.interface }}</td>
+                                    <td class="font-monospace text-primary">{{ iface.ipv4 }}</td>
+                                    <td class="font-monospace text-muted">{{ iface.netmask }}</td>
+                                    <td class="font-monospace text-muted">{{ iface.mac }}</td>
+                                    <td class="font-monospace">{{ iface.speed_mbps }} Mbps</td>
+                                    <td class="pe-4">
+                                        {% if iface.is_up %}
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                                <i class="bi bi-arrow-up-circle-fill me-1"></i>UP / ACTIVE
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary-subtle text-muted">
+                                                <i class="bi bi-arrow-down-circle me-1"></i>DOWN
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="6" class="text-center py-4 text-muted">No network interfaces discovered.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

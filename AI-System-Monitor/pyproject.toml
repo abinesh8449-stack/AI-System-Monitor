@@ -1,0 +1,28 @@
+[tool.pyrefly]
+search_path = [
+    ".",
+    "ai",
+    "alerts",
+    "monitoring",
+    "reports"
+]
+ignore-missing-imports = ["reportlab.*", "reportlab", "psutil.*", "psutil"]
+
+[tool.pyright]
+reportMissingTypeStubs = false
+reportMissingImports = false
+
+[project]
+name = "ai-system-monitor"
+version = "1.0.0"
+description = "AI-Powered System Monitoring Platform"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "flask",
+    "psutil",
+    "python-dotenv",
+    "reportlab",
+    "types-reportlab",
+    "types-psutil"
+]

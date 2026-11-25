@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}System Alerts & Incident Logs - AI-Powered System Monitor{% endblock %}
+
+{% block content %}
+<!-- Summary Header Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm border-0 border-start border-4 border-danger">
+            <div class="card-body p-3">
+                <div class="text-muted small text-uppercase fw-semibold">Critical Incidents</div>
+                <div class="h3 fw-bold mb-0 text-danger">{{ stats.critical_alerts }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm border-0 border-start border-4 border-warning">
+            <div class="card-body p-3">
+                <div class="text-muted small text-uppercase fw-semibold">Warning Incidents</div>
+                <div class="h3 fw-bold mb-0 text-warning">{{ stats.warning_alerts }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm border-0 border-start border-4 border-info">
+            <div class="card-body p-3">
+                <div class="text-muted small text-uppercase fw-semibold">Recovered Events</div>
+                <div class="h3 fw-bold mb-0 text-info">{{ stats.recovered_events }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card shadow-sm border-0 border-start border-4 border-primary">
+            <div class="card-body p-3">
+                <div class="text-muted small text-uppercase fw-semibold">Total Logged</div>
+                <div class="h3 fw-bold mb-0 text-primary">{{ stats.total_alerts }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alerts Table Card -->
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Alert Incident Directory</h4>
+                        <p class="text-muted small mb-0">Record of threshold breaches, automated notifications, and system recovery cycles</p>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm px-3 d-flex align-items-center gap-2 shadow-sm" id="btnTestEmail" onclick="sendTestEmailPrompt()">
+                            <i class="bi bi-send-fill"></i> Test Email Dispatch
+                        </button>
+                        <span class="badge bg-secondary-subtle text-light border border-secondary-subtle px-3 py-2">
+                            <i class="bi bi-clock-history me-1"></i> Anti-Spam Cooldown: 300s Active
+                        </span>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle small mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-3">ID</th>
+                                <th>Timestamp</th>
+                                <th>Resource</th>
+                                <th>Trigger Value</th>
+                                <th>Severity</th>
+                                <th>Problem Detected</th>
+                                <th>AI Recommendation</th>
+                                <th>Email Status</th>
+                                <th class="pe-3">Recovery Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if alerts %}
+                                {% for alert in alerts %}
+                                <tr>
+                                    <td class="ps-3 font-monospace text-muted">#{{ alert.id }}</td>
+                                    <td class="font-monospace text-nowrap">{{ alert.timestamp }}</td>
+                                    <td>
+                                        <span class="badge bg-dark-subtle text-light border border-secondary-subtle">
+                                            {{ alert.resource }}
+                                        </span>
+                                    </td>
+                                    <td class="fw-bold font-monospace">{{ alert.value }}%</td>
+                                    <td>
+                                        <span class="badge {% if alert.severity == 'CRITICAL' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                                            {{ alert.severity }}
+                                        </span>
+                                    </td>
+                                    <td class="fw-semibold">{{ alert.problem }}</td>
+                                    <td class="text-muted" style="max-width: 250px;">{{ alert.recommendation }}</td>
+                                    <td>
+                                        <span class="badge {% if 'Sent' in alert.email_status %}bg-success{% elif 'Suppressed' in alert.email_status %}bg-secondary{% else %}bg-dark border border-secondary-subtle{% endif %}">
+                                            <i class="bi bi-envelope me-1"></i>{{ alert.email_status }}
+                                        </span>
+                                    </td>
+                                    <td class="pe-3">
+                                        {% if alert.is_recovered == 1 %}
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle">
+                                                <i class="bi bi-check2-all me-1"></i>Recovered
+                                            </span>
+                                            <div class="small text-muted font-monospace mt-1">{{ alert.recovery_timestamp }}</div>
+                                        {% else %}
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle pulse-badge">
+                                                <i class="bi bi-broadcast me-1"></i>Unrecovered
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="9" class="text-center py-5 text-muted">
+                                        <i class="bi bi-shield-check fs-2 text-success d-block mb-2"></i>
+                                        No critical alert events recorded. System is operating safely.
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function sendTestEmailPrompt() {
+    const btn = document.getElementById('btnTestEmail');
+    const originalHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Sending Test...';
+
+    try {
+        const response = await fetch('/api/alerts/test-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+        });
+        const data = await response.json();
+        if (response.ok && data.status === 'success') {
+            alert('SUCCESS: ' + data.message);
+        } else {
+            alert('NOTICE: ' + (data.message || 'Email dispatch failed.'));
+        }
+    } catch (err) {
+        alert('ERROR: Could not contact server - ' + err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+    }
+}
+</script>
+{% endblock %}
